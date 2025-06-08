@@ -2,10 +2,12 @@
 
 A fast, modern desktop translation application built with Rust and Tauri that provides instant translation between multiple languages with global hotkey support, system tray integration, and a beautiful user interface. Using either OpenAI or Azure OpenAI, it delivers high-quality translations with minimal latency and cost.
 
+**Note:** This project has been tested on Windows 11 only. It may work on other platforms, but is not guaranteed. If you would like to help with testing on macOS or Linux, please open an issue.
+
 ## 📸 Screenshots
 
 ### Main Interface
-|
+
 **Light Theme**
 ![Light Theme](img/main_light.png)
 
@@ -59,7 +61,6 @@ A fast, modern desktop translation application built with Rust and Tauri that pr
 - **Translation History**: Persistent history with search and management
 - **Configuration**: JSON-based settings in `~/.gptranslate/config.json`
 - **Settings GUI**: User-friendly configuration interface
-- **Backup/Restore**: Easy configuration management
 
 ### Developer Features
 
@@ -92,6 +93,10 @@ GPTranslate is designed to be extremely cost-effective with the recommended `gpt
 - **1000 translations/day**: ~$0.05 ($15/month)
 
 The `gpt-4.1-nano` model provides excellent translation quality at virtually no cost for typical usage patterns, making GPTranslate highly economical for both personal and professional use.
+
+## ⬇️ Download Windows Installer
+
+You can download the latest Windows installer from the [Releases](
 
 ## 🚀 Quick Start
 
