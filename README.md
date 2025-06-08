@@ -45,7 +45,6 @@ A fast, modern desktop translation application built with Rust and Tauri that pr
     - When app is **not focused**: Clipboard capture and translation
     - When app **is focused**: Reset detected language
   - `Ctrl+C`: Copy translated text when app is focused
-- **Accessibility**: Full keyboard navigation and screen reader support
 - **Responsive Design**: Scales beautifully across different window sizes
 
 ### System Integration
@@ -58,7 +57,7 @@ A fast, modern desktop translation application built with Rust and Tauri that pr
 
 ### Data Management
 
-- **Translation History**: Persistent history with search and management
+- **Translation History**: Persistent history
 - **Configuration**: JSON-based settings in `~/.gptranslate/config.json`
 - **Settings GUI**: User-friendly configuration interface
 
@@ -96,7 +95,7 @@ The `gpt-4.1-nano` model provides excellent translation quality at virtually no 
 
 ## ⬇️ Download Windows Installer
 
-You can download the latest Windows installer from the [Releases](
+You can download the latest Windows installer from the [Releases](https://github.com/philberndt/GPTranslate/releases/tag/Stable) page.
 
 ## 🚀 Quick Start
 
