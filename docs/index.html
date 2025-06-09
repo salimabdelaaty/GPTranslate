@@ -7,15 +7,19 @@
     <title>GPTranslate - Fast AI Powered Desktop Translation App</title>
     <meta name="description"
       content="A fast, modern desktop translation application built with Rust and Tauri that provides instant translation between multiple languages with global hotkey support, system tray integration, and a beautiful user interface." />
+    <meta name="color-scheme" content="light dark" /> <!-- PicoCSS theme detection -->
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;500;600&display=swap" rel="stylesheet">
 
-    <!-- Bootstrap 5.3.6 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet"
-      crossorigin="anonymous">
+    <!-- PicoCSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+
+    <!-- Flexbox Grid -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flexboxgrid/6.3.1/flexboxgrid.min.css"
+      type="text/css">
 
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"
@@ -27,133 +31,147 @@
   </head>
 
   <body>
-    <header class="pb-4">
-      <div class="container pt-4">
-        <div class="row">
-          <div class="col-md-6">
-            <h1 class="display-4 fw-bold mb-3">
+    <header class="container">
+      <nav>
+        <ul>
+          <li>
+            <h1>
               <i class="bi bi-translate"></i> GPTranslate
             </h1>
-            <p class="fs-3 mb-4">Fast, Modern Desktop Translation</p>
-            <p class="lead mb-4">
-              A powerful AI powered desktop translation application built with Rust and Tauri that
-              provides instant translation between multiple languages with global
-              hotkey support, system tray integration, and a beautiful user interface.
-            </p>
-            <div class="d-flex flex-wrap gap-3 mt-4 mb-4">
-              <a href="https://github.com/philberndt/GPTranslate/releases/tag/Stable"
-                class="btn btn-light btn-lg d-inline-flex align-items-center">
-                <i class="bi bi-download me-2"></i>
+          </li>
+        </ul>
+        <ul>
+          <li>
+            <button id="theme-toggle" aria-label="Toggle theme" class="outline">
+              <i class="bi bi-sun-fill"></i>
+              <i class="bi bi-moon-stars-fill icon-hidden"></i>
+            </button>
+          </li>
+        </ul>
+      </nav>
+      <div class="row middle-xs">
+        <div class="col-xs-12 col-md-6">
+          <p>Fast, Modern Desktop Translation</p>
+          <p>
+            A powerful AI powered desktop translation application built with Rust and Tauri that
+            provides instant translation between multiple languages with global
+            hotkey support, system tray integration, and a beautiful user interface.
+          </p>
+          <div class="grid">
+            <div>
+              <a href="https://github.com/philberndt/GPTranslate/releases/tag/Stable" role="button" class="contrast">
+                <i class="bi bi-download"></i>
                 Download for Windows
               </a>
-              <a href="https://github.com/philberndt/gptranslate"
-                class="btn btn-light btn-lg d-inline-flex align-items-center">
-                <i class="bi bi-github me-2"></i>
+            </div>
+            <div>
+              <a href="https://github.com/philberndt/gptranslate" role="button" class="secondary">
+                <i class="bi bi-github"></i>
                 View on GitHub
               </a>
             </div>
           </div>
-          <div class="col-md-6 text-center ">
-            <div class="hero-image-wrapper">
-              <img src="assets/images/main_light.png" alt="GPTranslate Main Interface"
-                class="img-fluid rounded shadow-lg" />
-            </div>
+        </div>
+        <div class="col-xs-12 col-md-6 hero-image-container">
+          <div class="hero-image-wrapper">
+            <img src="assets/images/main_light.png" alt="GPTranslate Main Interface" class="hero-image"
+              id="hero-image" />
           </div>
         </div>
       </div>
     </header>
 
     <!-- Features Preview -->
-    <section class="container py-5">
-      <h2 class="text-center mb-5 text-primary">Why Choose GPTranslate?</h2>
-      <div class="row row-cols-1 row-cols-md-3 g-4">
-        <div class="col">
-          <div class="feature-card card p-3 text-center h-100">
-            <div class="feature-icon mb-3">
-              <i class="bi bi-lightning-charge fs-1"></i>
+    <section class="container">
+      <h2 class="text-primary">Why Choose GPTranslate?</h2>
+      <div class="row">
+        <div class="col-xs-12 col-md-4">
+          <article class="feature-card">
+            <div class="feature-icon">
+              <i class="bi bi-lightning-charge"></i>
             </div>
-            <h3 class="h5">Lightning Fast</h3>
+            <h5>Lightning Fast</h5>
             <p>
               Real-time translation as you type with 500ms debouncing for optimal
               performance and minimal API costs.
             </p>
-          </div>
+          </article>
         </div>
-        <div class="col">
-          <div class="feature-card card p-3 text-center h-100">
-            <div class="feature-icon mb-3">
-              <i class="bi bi-globe fs-1"></i>
+        <div class="col-xs-12 col-md-4">
+          <article class="feature-card">
+            <div class="feature-icon">
+              <i class="bi bi-globe"></i>
             </div>
-            <h3 class="h5">Global Hotkey</h3>
+            <h5>Global Hotkey</h5>
             <p>
               Capture and translate clipboard content from anywhere with
               configurable keyboard shortcuts.
             </p>
-          </div>
+          </article>
         </div>
-        <div class="col">
-          <div class="feature-card card p-3 text-center h-100">
-            <div class="feature-icon mb-3">
-              <i class="bi bi-stars fs-1"></i>
+        <div class="col-xs-12 col-md-4">
+          <article class="feature-card">
+            <div class="feature-icon">
+              <i class="bi bi-stars"></i>
             </div>
-            <h3 class="h5">AI Powered</h3>
+            <h5>AI Powered</h5>
             <p>
               Supports OpenAI and Azure OpenAI with intelligent language detection
               and custom prompts.
             </p>
-          </div>
+          </article>
         </div>
-        <div class="col">
-          <div class="feature-card card p-3 text-center h-100">
-            <div class="feature-icon mb-3">
-              <i class="bi bi-palette fs-1"></i>
+        <div class="col-xs-12 col-md-4">
+          <article class="feature-card">
+            <div class="feature-icon">
+              <i class="bi bi-palette"></i>
             </div>
-            <h3 class="h5">Modern UI</h3>
+            <h5>Modern UI</h5>
             <p>
               Beautiful, responsive interface with auto, light, and dark themes that
               adapt to your system.
             </p>
-          </div>
+          </article>
         </div>
-        <div class="col">
-          <div class="feature-card card p-3 text-center h-100">
-            <div class="feature-icon mb-3">
-              <i class="bi bi-currency-dollar fs-1"></i>
+        <div class="col-xs-12 col-md-4">
+          <article class="feature-card">
+            <div class="feature-icon">
+              <i class="bi bi-currency-dollar"></i>
             </div>
-            <h3 class="h5">Cost Effective</h3>
+            <h5>Cost Effective</h5>
             <p>
               Extremely economical with gpt-4.1-nano model - less than $0.0001 per
               translation.
             </p>
-          </div>
+          </article>
         </div>
-        <div class="col">
-          <div class="feature-card card p-3 text-center h-100">
-            <div class="feature-icon mb-3">
-              <i class="bi bi-code-square fs-1"></i>
+        <div class="col-xs-12 col-md-4">
+          <article class="feature-card">
+            <div class="feature-icon">
+              <i class="bi bi-code-square"></i>
             </div>
-            <h3 class="h5">Free and Open Source</h3>
+            <h5>Free and Open Source</h5>
             <p>
               Completely free to use and modify, with source code available on GitHub
               under the MIT license.
             </p>
-          </div>
+          </article>
         </div>
       </div>
     </section>
 
     <!-- Cost Analysis -->
-    <section class="container py-5 bg-light">
-      <h2 class="text-center mb-4 text-primary">Extremely Cost Effective</h2>
-      <p class="section-subtitle text-center text-muted mb-5">
+    <section class="container section-highlight">
+      <h2 class="text-primary">Extremely Cost Effective</h2>
+      <p>
         GPTranslate is designed to be highly economical with the recommended
         gpt-4.1-nano model
       </p>
-      <div class="mx-auto mb-5 max-width-860">
-        <div class="table-responsive card p-2 shadow-sm">
-          <table class="cost-table table mb-0">
+      <div class="cost-table-wrapper">
+        <figure>
+          <table class="cost-table">
             <thead>
-              <tr class="table-light">
+              <tr>
                 <th>Model</th>
                 <th>Input Cost</th>
                 <th>Output Cost</th>
@@ -193,160 +211,202 @@
               </tr>
             </tbody>
           </table>
-        </div>
-        <p class="table-note fst-italic text-muted mt-1">
-          *Based on ~100 words (130 tokens input + output)
+        </figure>
+        <p class="table-note">
+          <em>*Based on ~100 words (130 tokens input + output)</em>
         </p>
       </div>
 
       <div class="usage-examples">
-        <h3 class="text-center mb-4">Real-World Usage Examples</h3>
-        <div class="row row-cols-1 row-cols-md-3 g-4">
-          <div class="col">
-            <div class="example-card card text-center py-3 h-100">
+        <h3>Real-World Usage Examples</h3>
+        <div class="row">
+          <div class="col-xs-12 col-md-4">
+            <article class="example-card">
               <h4>Single Paragraph</h4>
-              <p class="cost fs-3 text-primary">Less than $0.0001</p>
-              <p class="mb-0">with gpt-4.1-nano</p>
-            </div>
+              <p class="cost text-primary">Less than $0.0001</p>
+              <p>with gpt-4.1-nano</p>
+            </article>
           </div>
-          <div class="col">
-            <div class="example-card card text-center py-3 h-100">
+          <div class="col-xs-12 col-md-4">
+            <article class="example-card">
               <h4>100 t/day</h4>
-              <p class="cost fs-3 text-primary">~$0.005</p>
-              <p class="mb-0">($1.50/month)</p>
-            </div>
+              <p class="cost text-primary">~$0.005</p>
+              <p>($1.50/month)</p>
+            </article>
           </div>
-          <div class="col">
-            <div class="example-card card text-center py-3 h-100">
+          <div class="col-xs-12 col-md-4">
+            <article class="example-card">
               <h4>1000 t/day</h4>
-              <p class="cost fs-3 text-primary">~$0.05</p>
-              <p class="mb-0">($15/month)</p>
-            </div>
+              <p class="cost text-primary">~$0.05</p>
+              <p>($15/month)</p>
+            </article>
           </div>
         </div>
       </div>
     </section>
 
     <!-- Screenshots -->
-    <section class="container py-5">
-      <h2 class="text-center mb-5 text-primary">See It In Action</h2>
-      <div class="row row-cols-1 row-cols-lg-3 g-4">
-        <div class="col">
-          <a href="assets/images/translation.png" target="_blank" class="screenshot-item card text-center h-100">
-            <img src="assets/images/translation.png" alt="Translation in Action" loading="lazy" class="img-fluid" />
-            <h3 class="h5">Translation in Action</h3>
-            <p class="mb-0">
-              Real-time translation with intelligent language detection
-            </p>
+    <section class="container">
+      <h2 class="text-primary">See It In Action</h2>
+      <div class="row">
+        <div class="col-xs-12 col-lg-4">
+          <a href="assets/images/translation.png" target="_blank" class="screenshot-item">
+            <article>
+              <img src="assets/images/translation.png" alt="Translation in Action" loading="lazy" />
+              <h5>Translation in Action</h5>
+              <p>
+                Real-time translation of selected text.
+              </p>
+            </article>
           </a>
         </div>
-        <div class="col">
-          <a href="assets/images/history.png" target="_blank" class="screenshot-item card text-center h-100">
-            <img src="assets/images/history.png" alt="History Management" loading="lazy" class="img-fluid" />
-            <h3 class="h5">History Management</h3>
-            <p class="mb-0">
-              Keep track of all your translations with searchable history
-            </p>
+        <div class="col-xs-12 col-lg-4">
+          <a href="assets/images/history.png" target="_blank" class="screenshot-item">
+            <article>
+              <img src="assets/images/history.png" alt="History Management" loading="lazy" />
+              <h5>History Management</h5>
+              <p>
+                Easily access and manage your translation history.
+              </p>
+            </article>
           </a>
         </div>
-        <div class="col">
-          <a href="assets/images/settings.png" target="_blank" class="screenshot-item card text-center h-100">
-            <img src="assets/images/settings.png" alt="Settings Panel" loading="lazy" class="img-fluid" />
-            <h3 class="h5">Settings Panel</h3>
-            <p class="mb-0">
-              Comprehensive configuration options for all your needs
-            </p>
+        <div class="col-xs-12 col-lg-4">
+          <a href="assets/images/settings.png" target="_blank" class="screenshot-item">
+            <article>
+              <img src="assets/images/settings.png" alt="Settings Panel" loading="lazy" />
+              <h5>Settings Panel</h5>
+              <p>
+                Customize GPTranslate to fit your needs.
+              </p>
+            </article>
           </a>
         </div>
       </div>
     </section>
 
     <!-- Tech Stack -->
-    <section class="container py-5 bg-light">
-      <h2 class="text-center mb-5 text-primary">Built with Modern Technology</h2>
-      <div class="row row-cols-1 row-cols-md-4 g-4">
-        <div class="col">
-          <div class="tech-item card p-3 text-center h-100">
-            <h3 class="h5 text-primary">Tauri 2.5+</h3>
-            <p class="mb-0">Secure, lightweight desktop framework</p>
-          </div>
+    <section class="container section-highlight">
+      <h2 class="text-primary">Built with Modern Technology</h2>
+      <div class="row">
+        <div class="col-xs-12 col-md-3">
+          <article class="tech-item">
+            <h5 class="text-primary">Tauri 2.5+</h5>
+            <p>Secure, lightweight desktop framework</p>
+          </article>
         </div>
-        <div class="col">
-          <div class="tech-item card p-3 text-center h-100">
-            <h3 class="h5 text-primary">Rust</h3>
-            <p class="mb-0">Memory-safe systems programming</p>
-          </div>
+        <div class="col-xs-12 col-md-3">
+          <article class="tech-item">
+            <h5 class="text-primary">Rust</h5>
+            <p>Memory-safe systems programming</p>
+          </article>
         </div>
-        <div class="col">
-          <div class="tech-item card p-3 text-center h-100">
-            <h3 class="h5 text-primary">SvelteKit</h3>
-            <p class="mb-0">Fast, reactive frontend framework</p>
-          </div>
+        <div class="col-xs-12 col-md-3">
+          <article class="tech-item">
+            <h5 class="text-primary">SvelteKit</h5>
+            <p>Fast, reactive frontend framework</p>
+          </article>
         </div>
-        <div class="col">
-          <div class="tech-item card p-3 text-center h-100">
-            <h3 class="h5 text-primary">TypeScript</h3>
-            <p class="mb-0">Type-safe JavaScript development</p>
-          </div>
+        <div class="col-xs-12 col-md-3">
+          <article class="tech-item">
+            <h5 class="text-primary">TypeScript</h5>
+            <p>Type-safe JavaScript development</p>
+          </article>
         </div>
       </div>
     </section>
 
     <!-- Call to Action -->
-    <section class="container py-5 text-center">
-      <h2 class="mb-3 text-primary">Ready to Get Started?</h2>
-      <p class="mb-4">
+    <section class="container">
+      <h2 class="text-primary">Ready to Get Started?</h2>
+      <p>
         Download GPTranslate today and experience fast, accurate AI powered translations at
         your fingertips.
       </p>
-      <div class="d-flex flex-column flex-sm-row justify-content-center gap-3">
-        <a href="https://github.com/philberndt/GPTranslate/releases/tag/Stable"
-          class="btn btn-primary btn-lg d-inline-flex align-items-center">
-          <i class="bi bi-download me-2"></i>
-          Download for Windows
-        </a>
+      <div class="grid">
+        <div>
+          <a href="https://github.com/philberndt/GPTranslate/releases/tag/Stable" role="button" class="contrast">
+            <i class="bi bi-download"></i>
+            Download for Windows
+          </a>
+        </div>
       </div>
     </section>
 
     <!-- Footer -->
-    <footer class="bg-dark text-light pt-5 pb-3 mt-4">
-      <div class="container">
-        <div class="row g-4 footer-content">
-          <div class="col-md-6">
-            <h3 class="text-primary">GPTranslate</h3>
-            <p>
-              Fast, modern AI powered desktop translation application built with Rust and Tauri.
-            </p>
-            <div class="social-links d-flex gap-2">
-              <a href="https://github.com/philberndt/gptranslate" aria-label="GitHub" target="_blank"
-                rel="noopener noreferrer" class="text-light">
-                <i class="bi bi-github fs-4"></i>
-              </a>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <h4 class="text-primary">Contact</h4>
-            <ul class="list-unstyled">
-              <li>
-                <a href="https://berndt.no" class="text-light" target="_blank" rel="noopener noreferrer">
-                  berndt.no
-                </a>
-              </li>
-            </ul>
-          </div>
+    <footer class="container footer-content">
+      <div class="row">
+        <div class="col-xs-12 col-md-6">
+          <h3 class="text-primary">GPTranslate</h3>
+          <p>Free and Open Source desktop translation app. Needs an Azure OpenAI API or OpenAI API key.</p>
         </div>
-        <div class="footer-bottom border-top border-secondary mt-4 pt-3 text-center">
-          <p class="mb-0">
-            &copy; 2025 Phil Berndt. Licensed under the MIT License.
+        <div class="col-xs-12 col-md-6">
+          <p>
+            <a href="https://github.com/philberndt/GPTranslate">GitHub</a><br>
+            <a href="https://github.com/philberndt/GPTranslate/releases">Releases</a><br>
+            <a href="https://github.com/philberndt/GPTranslate/issues">Issues</a>
           </p>
         </div>
       </div>
+      <div class="footer-bottom">
+        <p>
+          &copy; 2024 GPTranslate. Licensed under MIT.
+        </p>
+      </div>
     </footer>
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"
-      crossorigin="anonymous"></script>
+    <script>
+      const themeToggle = document.getElementById('theme-toggle');
+      const htmlElement = document.documentElement;
+      const sunIcon = themeToggle.querySelector('.bi-sun-fill');
+      const moonIcon = themeToggle.querySelector('.bi-moon-stars-fill');
+      const heroImage = document.getElementById('hero-image');
+      const lightImageSrc = 'assets/images/main_light.png';
+      const darkImageSrc = 'assets/images/main_dark.png';
+
+      // Function to set theme and update icon/image
+      function setTheme(theme) {
+        htmlElement.setAttribute('data-theme', theme);
+        if (theme === 'dark') {
+          sunIcon.classList.add('icon-hidden');
+          moonIcon.classList.remove('icon-hidden');
+          if (heroImage) heroImage.src = darkImageSrc;
+        } else {
+          sunIcon.classList.remove('icon-hidden');
+          moonIcon.classList.add('icon-hidden');
+          if (heroImage) heroImage.src = lightImageSrc;
+        }
+        localStorage.setItem('theme', theme); // Save preference
+      }
+
+      // Function to toggle theme
+      function toggleTheme() {
+        const currentTheme = htmlElement.getAttribute('data-theme') || 'light';
+        const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+        setTheme(newTheme);
+      }
+
+      themeToggle.addEventListener('click', toggleTheme);
+
+      // Auto-detect and apply theme on initial load
+      const preferredTheme = localStorage.getItem('theme');
+      const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+      if (preferredTheme) {
+        setTheme(preferredTheme);
+      } else if (systemPrefersDark) {
+        setTheme('dark');
+      } else {
+        setTheme('light'); // Default to light if no preference or system setting
+      }
+
+      // Listen for changes in system preference
+      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+        if (!localStorage.getItem('theme')) { // Only change if no explicit user preference is set
+          setTheme(e.matches ? 'dark' : 'light');
+        }
+      });
+    </script>
   </body>
 
 </html>
-````
