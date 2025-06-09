@@ -1,6 +1,6 @@
 # ![GPTranslate](img/logo.svg)
 
-A fast, modern desktop translation application built with Rust and Tauri that provides instant translation between multiple languages with global hotkey support, system tray integration, and a beautiful user interface. Using either OpenAI or Azure OpenAI, it delivers high-quality translations with minimal latency and cost.
+A fast, modern **AI powered** desktop translation application built with Rust and Tauri that provides instant translation between multiple languages with global hotkey support, system tray integration, and a beautiful user interface. Using either OpenAI or Azure OpenAI, it delivers high-quality translations with minimal latency and cost.
 
 **Note:** This project has been tested on Windows 11 only. It may work on other platforms, but is not guaranteed. If you would like to help with testing on macOS or Linux, please open an issue.
 

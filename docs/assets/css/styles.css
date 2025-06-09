@@ -1,0 +1,42 @@
+.max-width-860 {
+  max-width: 860px;
+}
+
+:root {
+  --primary-color: #379DF1;
+  --primary-dark: #2b7bc7;
+  --secondary-color: #f8f9fa;
+  --text-primary: #2c3e50;
+  --text-secondary: #7f8c8d;
+  --border-color: #e9ecef;
+  --shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  --radius: 8px;
+}
+
+.screenshot {
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  max-width: 100%;
+}
+
+/* Global font overrides */
+body {
+  font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  color: #333333;
+}
+
+code,
+pre,
+.mono {
+  font-family: "Cascadia Code", monospace;
+}
+
+/* Brand color adaptation (icons, headings, accent) */
+.text-primary {
+  color: #379df1 !important;
+}
+
+.bi,
+i.bi-translate {
+  color: #379df1 !important;
+}
