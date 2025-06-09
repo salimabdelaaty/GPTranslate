@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GPTranslate - Fast Desktop Translation App</title>
+    <meta name="description" content="A fast, modern desktop translation application built with Rust and Tauri that provides instant translation between multiple languages with global hotkey support, system tray integration, and a beautiful user interface.">
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="icon" type="image/png" href="assets/images/favicon.png">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <img src="assets/images/logo.svg" alt="GPTranslate Logo" class="nav-logo">
+                <h1>GPTranslate</h1>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html" class="active">Home</a></li>
+                <li><a href="getting-started.html">Getting Started</a></li>
+                <li><a href="features.html">Features</a></li>
+                <li><a href="configuration.html">Configuration</a></li>
+                <li><a href="development.html">Development</a></li>
+                <li><a href="contributing.html">Contributing</a></li>
+            </ul>
+            <div class="nav-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <section class="hero">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h1>GPTranslate</h1>
+                    <p class="hero-subtitle">Fast, Modern Desktop Translation</p>
+                    <p class="hero-description">
+                        A powerful desktop translation application built with Rust and Tauri that provides instant translation 
+                        between multiple languages with global hotkey support, system tray integration, and a beautiful user interface.
+                    </p>
+                    <div class="hero-buttons">
+                        <a href="https://github.com/philberndt/GPTranslate/releases/tag/Stable" class="btn btn-primary">
+                            <i class="bi bi-download"></i>
+                            Download for Windows
+                        </a>
+                        <a href="getting-started.html" class="btn btn-secondary">
+                            <i class="bi bi-book"></i>
+                            Get Started
+                        </a>
+                        <a href="https://github.com/philberndt/gptranslate" class="btn btn-outline">
+                            <i class="bi bi-github"></i>
+                            View on GitHub
+                        </a>
+                    </div>
+                </div>
+                <div class="hero-image">
+                    <img src="assets/images/main_light.png" alt="GPTranslate Main Interface" class="screenshot">
+                </div>
+            </div>
+        </section>
+
+        <section class="features-preview">
+            <div class="container">
+                <h2>Why Choose GPTranslate?</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="bi bi-lightning-charge"></i>
+                        </div>
+                        <h3>Lightning Fast</h3>
+                        <p>Real-time translation as you type with 500ms debouncing for optimal performance and minimal API costs.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="bi bi-globe"></i>
+                        </div>
+                        <h3>Global Hotkey</h3>
+                        <p>Capture and translate clipboard content from anywhere with configurable keyboard shortcuts.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="bi bi-cpu"></i>
+                        </div>
+                        <h3>AI Powered</h3>
+                        <p>Supports OpenAI and Azure OpenAI with intelligent language detection and custom prompts.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="bi bi-palette"></i>
+                        </div>
+                        <h3>Modern UI</h3>
+                        <p>Beautiful, responsive interface with auto, light, and dark themes that adapt to your system.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="bi bi-currency-dollar"></i>
+                        </div>
+                        <h3>Cost Effective</h3>
+                        <p>Extremely economical with gpt-4.1-nano model - less than $0.0001 per translation.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="bi bi-shield-check"></i>
+                        </div>
+                        <h3>Privacy Focused</h3>
+                        <p>All data stored locally with secure API key management and no telemetry.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="cost-analysis">
+            <div class="container">
+                <h2>Extremely Cost Effective</h2>
+                <p class="section-subtitle">GPTranslate is designed to be highly economical with the recommended gpt-4.1-nano model</p>
+                
+                <div class="cost-table-container">
+                    <table class="cost-table">
+                        <thead>
+                            <tr>
+                                <th>Model</th>
+                                <th>Input Cost</th>
+                                <th>Output Cost</th>
+                                <th>Cost per Paragraph*</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="recommended">
+                                <td><strong>gpt-4.1-nano</strong> (recommended)</td>
+                                <td>$0.10/1M tokens</td>
+                                <td>$0.40/1M tokens</td>
+                                <td><strong>~$0.00005</strong></td>
+                            </tr>
+                            <tr>
+                                <td>gpt-4.1-mini</td>
+                                <td>$0.40/1M tokens</td>
+                                <td>$1.60/1M tokens</td>
+                                <td>~$0.00019</td>
+                            </tr>
+                            <tr>
+                                <td>gpt-4o-mini</td>
+                                <td>$0.15/1M tokens</td>
+                                <td>$0.60/1M tokens</td>
+                                <td>~$0.000071</td>
+                            </tr>
+                            <tr>
+                                <td>gpt-4.1</td>
+                                <td>$2.00/1M tokens</td>
+                                <td>$8.00/1M tokens</td>
+                                <td>~$0.00095</td>
+                            </tr>
+                            <tr>
+                                <td>gpt-4o</td>
+                                <td>$2.50/1M tokens</td>
+                                <td>$10.00/1M tokens</td>
+                                <td>~$0.00119</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <p class="table-note">*Based on ~100 words (130 tokens input + output)</p>
+                </div>
+
+                <div class="usage-examples">
+                    <h3>Real-World Usage Examples</h3>
+                    <div class="examples-grid">
+                        <div class="example-card">
+                            <h4>Single Paragraph</h4>
+                            <p class="cost">Less than $0.0001</p>
+                            <p>with gpt-4.1-nano</p>
+                        </div>
+                        <div class="example-card">
+                            <h4>100 translations/day</h4>
+                            <p class="cost">~$0.005</p>
+                            <p>($1.50/month)</p>
+                        </div>
+                        <div class="example-card">
+                            <h4>1000 translations/day</h4>
+                            <p class="cost">~$0.05</p>
+                            <p>($15/month)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="screenshots">
+            <div class="container">
+                <h2>See It In Action</h2>
+                <div class="screenshots-grid">
+                    <div class="screenshot-item">
+                        <img src="assets/images/translation.png" alt="Translation in Action" loading="lazy">
+                        <h3>Translation in Action</h3>
+                        <p>Real-time translation with intelligent language detection</p>
+                    </div>
+                    <div class="screenshot-item">
+                        <img src="assets/images/history.png" alt="History Management" loading="lazy">
+                        <h3>History Management</h3>
+                        <p>Keep track of all your translations with searchable history</p>
+                    </div>
+                    <div class="screenshot-item">
+                        <img src="assets/images/settings.png" alt="Settings Panel" loading="lazy">
+                        <h3>Settings Panel</h3>
+                        <p>Comprehensive configuration options for all your needs</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="tech-stack">
+            <div class="container">
+                <h2>Built with Modern Technology</h2>
+                <div class="tech-grid">
+                    <div class="tech-item">
+                        <h3>Tauri 2.5+</h3>
+                        <p>Secure, lightweight desktop framework</p>
+                    </div>
+                    <div class="tech-item">
+                        <h3>Rust</h3>
+                        <p>Memory-safe systems programming</p>
+                    </div>
+                    <div class="tech-item">
+                        <h3>SvelteKit</h3>
+                        <p>Fast, reactive frontend framework</p>
+                    </div>
+                    <div class="tech-item">
+                        <h3>TypeScript</h3>
+                        <p>Type-safe JavaScript development</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="cta">
+            <div class="container">
+                <h2>Ready to Get Started?</h2>
+                <p>Download GPTranslate today and experience fast, accurate translations at your fingertips.</p>
+                <div class="cta-buttons">
+                    <a href="https://github.com/philberndt/GPTranslate/releases/tag/Stable" class="btn btn-primary btn-large">
+                        <i class="bi bi-download"></i>
+                        Download for Windows
+                    </a>
+                    <a href="getting-started.html" class="btn btn-outline btn-large">
+                        <i class="bi bi-arrow-right"></i>
+                        View Documentation
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>GPTranslate</h3>
+                    <p>Fast, modern desktop translation application built with Rust and Tauri.</p>
+                    <div class="social-links">
+                        <a href="https://github.com/philberndt/gptranslate" aria-label="GitHub">
+                            <i class="bi bi-github"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>Documentation</h4>
+                    <ul>
+                        <li><a href="getting-started.html">Getting Started</a></li>
+                        <li><a href="features.html">Features</a></li>
+                        <li><a href="configuration.html">Configuration</a></li>
+                        <li><a href="development.html">Development</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Community</h4>
+                    <ul>
+                        <li><a href="contributing.html">Contributing</a></li>
+                        <li><a href="https://github.com/philberndt/gptranslate/issues">Issues</a></li>
+                        <li><a href="https://github.com/philberndt/gptranslate/discussions">Discussions</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact</h4>
+                    <ul>
+                        <li><a href="mailto:phil@berndt.no">phil@berndt.no</a></li>
+                        <li><a href="https://berndt.no">berndt.no</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Phil Berndt. Licensed under the MIT License.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="assets/js/main.js"></script>
+</body>
+</html>

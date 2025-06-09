@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Getting Started - GPTranslate Documentation</title>
+        <meta name="description"
+            content="Complete guide to installing, configuring, and using GPTranslate desktop translation application.">
+        <link rel="stylesheet" href="assets/css/styles.css">
+        <link rel="icon" type="image/png" href="assets/images/favicon.png">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    </head>
+
+    <body>
+        <nav class="navbar">
+            <div class="nav-container">
+                <div class="nav-brand">
+                    <img src="assets/images/logo.svg" alt="GPTranslate Logo" class="nav-logo">
+                    <h1>GPTranslate</h1>
+                </div>
+                <ul class="nav-menu">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="getting-started.html" class="active">Getting Started</a></li>
+                    <li><a href="features.html">Features</a></li>
+                    <li><a href="configuration.html">Configuration</a></li>
+                    <li><a href="development.html">Development</a></li>
+                    <li><a href="contributing.html">Contributing</a></li>
+                </ul>
+                <div class="nav-toggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </nav>
+
+        <main class="main-content">
+            <div class="content-header">
+                <div class="container">
+                    <h1>Getting Started</h1>
+                    <p>Everything you need to start translating with GPTranslate</p>
+                </div>
+            </div>
+
+            <section class="content-page">
+                <div class="content-body">
+                    <h2>Quick Start</h2>
+                    <p>Get up and running with GPTranslate in just a few minutes. This guide will walk you through
+                        downloading, installing, and configuring the application for your first translation.</p>
+
+                    <h2>Prerequisites</h2>
+                    <p>Before installing GPTranslate, ensure your system meets the following requirements:</p>
+
+                    <h3>System Requirements</h3>
+                    <ul>
+                        <li><strong>Operating System:</strong> Windows 10 or Windows 11 (tested on Windows 11)</li>
+                        <li><strong>WebView2:</strong> Usually pre-installed on Windows 11, automatic download on
+                            Windows 10</li>
+                        <li><strong>Memory:</strong> Minimum 4GB RAM recommended</li>
+                        <li><strong>Storage:</strong> ~50MB available disk space</li>
+                    </ul>
+
+                    <h3>API Requirements</h3>
+                    <p>You'll need an API key from one of the supported providers:</p>
+                    <ul>
+                        <li><strong>OpenAI:</strong> API key from <a href="https://platform.openai.com/api-keys">OpenAI
+                                Platform</a></li>
+                        <li><strong>Azure OpenAI:</strong> API key and endpoint from Azure Portal</li>
+                        <li><strong>Ollama:</strong> Local Ollama installation (optional)</li>
+                    </ul>
+
+                    <h2>Installation</h2>
+
+                    <h3>Option 1: Download Pre-built Installer (Recommended)</h3>
+                    <ol>
+                        <li>Visit the <a href="https://github.com/philberndt/GPTranslate/releases/tag/Stable">Releases
+                                page</a></li>
+                        <li>Download the latest Windows installer (<code>.msi</code> file)</li>
+                        <li>Run the installer and follow the setup wizard</li>
+                        <li>Launch GPTranslate from the Start menu or desktop shortcut</li>
+                    </ol>
+
+                    <h3>Option 2: Build from Source</h3>
+                    <p>For developers or advanced users who want to build from source:</p>
+
+                    <h4>Prerequisites for Building</h4>
+                    <ul>
+                        <li><strong>Rust:</strong> 1.87+ with stable toolchain</li>
+                        <li><strong>Node.js:</strong> 22+ with npm</li>
+                        <li><strong>Visual Studio Build Tools:</strong> 2022 (Windows)</li>
+                    </ul>
+
+                    <h4>Build Steps</h4>
+                    <pre><code># Clone the repository
+git clone https://github.com/philberndt/gptranslate.git
+cd gptranslate
+
+# Install dependencies
+npm install
+
+# Run in development mode
+npm run tauri dev
+
+# Or build for production
+npm run tauri build</code></pre>
+
+                    <h2>First-Time Setup</h2>
+
+                    <h3>1. Initial Launch</h3>
+                    <p>When you first launch GPTranslate:</p>
+                    <ul>
+                        <li>The application will appear in your system tray</li>
+                        <li>Click the tray icon to open the main window</li>
+                        <li>You'll see the translation interface with empty text areas</li>
+                    </ul>
+
+                    <h3>2. Configure API Settings</h3>
+                    <p>Before you can translate, you need to configure your API settings:</p>
+                    <ol>
+                        <li>Click the <strong>Settings</strong> icon (gear) at the bottom of the window</li>
+                        <li>Select your preferred provider (OpenAI, Azure OpenAI, or Ollama)</li>
+                        <li>Enter your API credentials</li>
+                        <li>Choose your preferred model</li>
+                        <li>Set your target language</li>
+                        <li>Click <strong>Save</strong> to apply settings</li>
+                    </ol>
+
+                    <h3>3. Set Up Global Hotkey</h3>
+                    <p>Configure the global hotkey for quick translations:</p>
+                    <ol>
+                        <li>In Settings, find the <strong>Hotkey</strong> field</li>
+                        <li>Click in the field and press your desired key combination</li>
+                        <li>Default is <code>Ctrl+Alt+C</code> - change if needed</li>
+                        <li>Save your settings</li>
+                    </ol>
+
+                    <h2>Your First Translation</h2>
+
+                    <h3>Method 1: Direct Input</h3>
+                    <ol>
+                        <li>Open the GPTranslate window</li>
+                        <li>Type or paste text in the left panel</li>
+                        <li>Translation appears automatically in the right panel</li>
+                        <li>Click <strong>Copy</strong> to copy the translation</li>
+                    </ol>
+
+                    <h3>Method 2: Global Hotkey</h3>
+                    <ol>
+                        <li>Copy any text with <code>Ctrl+C</code></li>
+                        <li>Press your global hotkey (default: <code>Ctrl+Alt+C</code>)</li>
+                        <li>GPTranslate opens with the translation ready</li>
+                        <li>Translation is automatically copied to clipboard</li>
+                    </ol>
+
+                    <h2>API Provider Setup</h2>
+
+                    <h3>OpenAI Setup</h3>
+                    <ol>
+                        <li>Go to <a href="https://platform.openai.com/api-keys">OpenAI Platform</a></li>
+                        <li>Create an account or sign in</li>
+                        <li>Navigate to API Keys section</li>
+                        <li>Click "Create new secret key"</li>
+                        <li>Copy the API key</li>
+                        <li>In GPTranslate Settings:
+                            <ul>
+                                <li>Select "OpenAI" as provider</li>
+                                <li>Enter your API key</li>
+                                <li>Set model to <code>gpt-4.1-nano</code> (recommended for cost)</li>
+                            </ul>
+                        </li>
+                    </ol>
+
+                    <h3>Azure OpenAI Setup</h3>
+                    <ol>
+                        <li>Go to <a href="https://portal.azure.com">Azure Portal</a></li>
+                        <li>Create an Azure OpenAI resource</li>
+                        <li>Deploy a model (e.g., <code>gpt-4.1-nano</code>)</li>
+                        <li>Note your endpoint and API key</li>
+                        <li>In GPTranslate Settings:
+                            <ul>
+                                <li>Select "Azure OpenAI" as provider</li>
+                                <li>Enter your endpoint URL</li>
+                                <li>Enter your API key</li>
+                                <li>Enter your deployment name</li>
+                            </ul>
+                        </li>
+                    </ol>
+
+                    <h3>Ollama Setup (Advanced)</h3>
+                    <ol>
+                        <li>Install <a href="https://ollama.ai">Ollama</a> locally</li>
+                        <li>Pull a translation model:
+                            <pre><code>ollama pull phi3-mini-128k-instruct</code></pre>
+                        </li>
+                        <li>In GPTranslate Settings:
+                            <ul>
+                                <li>Select "Ollama" as provider</li>
+                                <li>Set endpoint to <code>http://localhost:11434</code></li>
+                                <li>Enter model name (e.g., <code>phi3-mini-128k-instruct</code>)</li>
+                            </ul>
+                        </li>
+                    </ol>
+
+                    <h2>Basic Usage</h2>
+
+                    <h3>Translation Workflow</h3>
+                    <ol>
+                        <li><strong>Input Text:</strong> Type or paste text in the left panel</li>
+                        <li><strong>Auto-Detection:</strong> Language is automatically detected</li>
+                        <li><strong>Translation:</strong> Appears in the right panel after 500ms delay</li>
+                        <li><strong>Copy Result:</strong> Use the Copy button or <code>Ctrl+C</code></li>
+                    </ol>
+
+                    <h3>Keyboard Shortcuts</h3>
+                    <ul>
+                        <li><strong>Global Hotkey</strong> (default <code>Ctrl+Alt+C</code>):
+                            <ul>
+                                <li>When app not focused: Capture clipboard and translate</li>
+                                <li>When app focused: Reset detected language</li>
+                            </ul>
+                        </li>
+                        <li><strong><code>Ctrl+C</code></strong>: Copy translated text (when app focused)</li>
+                        <li><strong><code>Esc</code></strong>: Close dialogs</li>
+                    </ul>
+
+                    <h3>System Tray Integration</h3>
+                    <ul>
+                        <li><strong>Click tray icon:</strong> Show/hide main window</li>
+                        <li><strong>Right-click tray icon:</strong> Show context menu</li>
+                        <li><strong>Close button:</strong> Minimizes to tray (doesn't exit)</li>
+                    </ul>
+
+                    <h2>Troubleshooting</h2>
+
+                    <h3>Common Issues</h3>
+
+                    <h4>Translation Not Working</h4>
+                    <ul>
+                        <li>Check your API key is correct and valid</li>
+                        <li>Verify internet connection</li>
+                        <li>Ensure you have sufficient API credits/quota</li>
+                        <li>Check the model name is correct for your provider</li>
+                    </ul>
+
+                    <h4>Global Hotkey Not Working</h4>
+                    <ul>
+                        <li>Try a different key combination</li>
+                        <li>Check if another application is using the same hotkey</li>
+                        <li>Run GPTranslate as administrator (if needed)</li>
+                        <li>Restart the application after changing hotkey</li>
+                    </ul>
+
+                    <h4>App Not Starting</h4>
+                    <ul>
+                        <li>Ensure WebView2 is installed (download from Microsoft)</li>
+                        <li>Check Windows version compatibility</li>
+                        <li>Try running as administrator</li>
+                        <li>Check antivirus software isn't blocking the app</li>
+                    </ul>
+
+                    <h3>Getting Help</h3>
+                    <p>If you encounter issues not covered here:</p>
+                    <ul>
+                        <li><strong>GitHub Issues:</strong> <a
+                                href="https://github.com/philberndt/gptranslate/issues">Report bugs or request
+                                features</a></li>
+                        <li><strong>Discussions:</strong> <a
+                                href="https://github.com/philberndt/gptranslate/discussions">Community support</a></li>
+                        <li><strong>Email:</strong> <a href="mailto:phil@berndt.no">phil@berndt.no</a></li>
+                    </ul>
+
+                    <h2>Next Steps</h2>
+                    <p>Now that you have GPTranslate up and running:</p>
+                    <ul>
+                        <li><a href="features.html">Explore all features</a> - Learn about advanced capabilities</li>
+                        <li><a href="configuration.html">Customize configuration</a> - Optimize settings for your
+                            workflow</li>
+                        <li><a href="contributing.html">Contribute</a> - Help improve GPTranslate</li>
+                    </ul>
+                </div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <div class="container">
+                <div class="footer-content">
+                    <div class="footer-section">
+                        <h3>GPTranslate</h3>
+                        <p>Fast, modern desktop translation application built with Rust and Tauri.</p>
+                        <div class="social-links">
+                            <a href="https://github.com/philberndt/gptranslate" aria-label="GitHub">
+                                <i class="bi bi-github"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="footer-section">
+                        <h4>Documentation</h4>
+                        <ul>
+                            <li><a href="getting-started.html">Getting Started</a></li>
+                            <li><a href="features.html">Features</a></li>
+                            <li><a href="configuration.html">Configuration</a></li>
+                            <li><a href="development.html">Development</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-section">
+                        <h4>Community</h4>
+                        <ul>
+                            <li><a href="contributing.html">Contributing</a></li>
+                            <li><a href="https://github.com/philberndt/gptranslate/issues">Issues</a></li>
+                            <li><a href="https://github.com/philberndt/gptranslate/discussions">Discussions</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-section">
+                        <h4>Contact</h4>
+                        <ul>
+                            <li><a href="mailto:phil@berndt.no">phil@berndt.no</a></li>
+                            <li><a href="https://berndt.no">berndt.no</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="footer-bottom">
+                    <p>&copy; 2025 Phil Berndt. Licensed under the MIT License.</p>
+                </div>
+            </div>
+        </footer>
+
+        <script src="assets/js/main.js"></script>
+    </body>
+
+</html>
