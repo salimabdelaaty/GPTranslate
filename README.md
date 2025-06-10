@@ -105,7 +105,7 @@ The `gpt-4.1-nano` model provides excellent translation quality at virtually no 
 
 ## ⬇️ Download Windows Installer
 
-You can download the latest Windows installer from the [Releases](https://github.com/philberndt/GPTranslate/releases/tag/Stable) page.
+You can download the latest Windows installer from the [Releases](https://github.com/philberndt/GPTranslate/releases) page.
 
 ## 🚀 Quick Start
 
