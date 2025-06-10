@@ -18,10 +18,8 @@
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link
             href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
-            rel="stylesheet">
-
-        <!-- Favicon -->
-        <link rel="icon" href="../img/logo_app.svg" type="image/svg+xml">
+            rel="stylesheet"> <!-- Favicon -->
+        <link rel="icon" href="assets/logo_app.svg" type="image/svg+xml">
 
         <style>
             :root {
@@ -305,7 +303,7 @@
             <div class="container">
                 <div class="hero-content">
                     <div class="hero-title">
-                        <img src="../img/logo_app.svg" alt="GPTranslate Logo" class="hero-logo">
+                        <img src="assets/logo_app.svg" alt="GPTranslate Logo" class="hero-logo">
                         <h1>GPTranslate</h1>
                     </div>
                     <p>A fast, modern AI powered desktop translation application built with Rust and Tauri. Instant
@@ -330,7 +328,7 @@
             <div class="container">
                 <h2>Beautiful, Simple Interface</h2>
                 <div class="screenshot-container">
-                    <img src="../img/main_light.png" alt="GPTranslate Main Interface" class="screenshot"
+                    <img src="assets/main_light.png" alt="GPTranslate Main Interface" class="screenshot"
                         id="main-screenshot">
                 </div>
             </div>
@@ -412,7 +410,7 @@
                     </div>
                     <div class="col-6">
                         <div class="screenshot-container">
-                            <img src="../img/translation.png" alt="GPTranslate Translation in Action"
+                            <img src="assets/translation.png" alt="GPTranslate Translation in Action"
                                 class="screenshot">
                         </div>
                     </div>
@@ -422,12 +420,12 @@
                 <div class="row" style="margin-top: 3rem;">
                     <div class="col-6">
                         <div class="screenshot-container">
-                            <img src="../img/settings.png" alt="GPTranslate Settings" class="screenshot">
+                            <img src="assets/settings.png" alt="GPTranslate Settings" class="screenshot">
                         </div>
                     </div>
                     <div class="col-6">
                         <div class="screenshot-container">
-                            <img src="../img/history.png" alt="GPTranslate History" class="screenshot">
+                            <img src="assets/history.png" alt="GPTranslate History" class="screenshot">
                         </div>
                     </div>
                 </div>
@@ -511,11 +509,9 @@
 
             // Check for saved theme preference or default to 'auto' mode
             const currentTheme = localStorage.getItem('theme');
-            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-
-            function updateScreenshot(isDark) {
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches; function updateScreenshot(isDark) {
                 if (mainScreenshot) {
-                    mainScreenshot.src = isDark ? '../img/main_dark.png' : '../img/main_light.png';
+                    mainScreenshot.src = isDark ? 'assets/main_dark.png' : 'assets/main_light.png';
                 }
             }
 
