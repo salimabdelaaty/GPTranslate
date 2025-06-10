@@ -2,12 +2,14 @@
     import { invoke } from "@tauri-apps/api/core";
     import { onMount } from "svelte";
     import AppIcon from "./AppIcon.svelte";
+    import pkg from "../../package.json";
+    const version = pkg.version;
     let config = $state({
         api_provider: "openai",
         openai_api_key: "",
         azure_endpoint: "",
         azure_api_key: "",
-        azure_api_version: "2024-08-01-preview",
+        azure_api_version: "2025-01-01-preview",
         azure_deployment_name: "gpt-4.1-nano",
         model: "gpt-4.1-nano",
         target_language: "English",
@@ -22,6 +24,12 @@
     let apiKeyValid = $state<boolean | null>(null);
     let isSaving = $state(false);
     let saveMessage = $state("");
+    let azureEndpointInfo = $state<{
+        isValid: boolean;
+        type?: string;
+        deploymentDetected?: string;
+        apiVersionDetected?: string;
+    } | null>(null);
 
     interface Props {
         onClose: () => void;
@@ -48,6 +56,154 @@
         }
         apiKeyValid = null;
     }
+    function parseAzureEndpoint(url: string): {
+        baseUrl: string;
+        apiVersion: string;
+        deploymentName: string | null;
+        isModelsEndpoint: boolean;
+        isValid: boolean;
+        errorMessage?: string;
+    } {
+        try {
+            const parsedUrl = new URL(url);
+
+            // Extract API version from query parameters
+            const apiVersion = parsedUrl.searchParams.get("api-version");
+
+            // Determine endpoint type based on hostname
+            const isModelsEndpoint = parsedUrl.hostname.includes(
+                "services.ai.azure.com",
+            );
+            const isCognitiveServicesEndpoint = parsedUrl.hostname.includes(
+                "cognitiveservices.azure.com",
+            );
+
+            if (!isModelsEndpoint && !isCognitiveServicesEndpoint) {
+                return {
+                    baseUrl: url,
+                    apiVersion: config.azure_api_version,
+                    deploymentName: null,
+                    isModelsEndpoint: false,
+                    isValid: false,
+                    errorMessage:
+                        "URL must be either a cognitiveservices.azure.com or services.ai.azure.com endpoint",
+                };
+            }
+
+            // Extract deployment name for cognitive services endpoints
+            let deploymentName: string | null = null;
+            if (isCognitiveServicesEndpoint) {
+                const pathParts = parsedUrl.pathname
+                    .split("/")
+                    .filter((part) => part.length > 0);
+                const deploymentIndex = pathParts.findIndex(
+                    (part) => part === "deployments",
+                );
+
+                if (
+                    deploymentIndex !== -1 &&
+                    deploymentIndex + 1 < pathParts.length
+                ) {
+                    deploymentName = pathParts[deploymentIndex + 1];
+                } else {
+                    // If no deployment in path, we can still extract from a full endpoint URL
+                    console.log(
+                        "No deployment found in path, cognitive services endpoint may need deployment name",
+                    );
+                }
+            }
+
+            // Create base URL (without path and query parameters)
+            const baseUrl = `${parsedUrl.protocol}//${parsedUrl.host}`;
+
+            return {
+                baseUrl,
+                apiVersion: apiVersion || config.azure_api_version,
+                deploymentName,
+                isModelsEndpoint,
+                isValid: true,
+            };
+        } catch (e) {
+            console.error("Error parsing Azure endpoint URL:", e);
+            return {
+                baseUrl: url,
+                apiVersion: config.azure_api_version,
+                deploymentName: null,
+                isModelsEndpoint: false,
+                isValid: false,
+                errorMessage: `Invalid URL format: ${e instanceof Error ? e.message : "Unknown error"}`,
+            };
+        }
+    }
+    function onAzureEndpointChange() {
+        azureEndpointInfo = null; // Reset info
+
+        if (config.azure_endpoint) {
+            try {
+                const {
+                    baseUrl,
+                    apiVersion,
+                    deploymentName,
+                    isModelsEndpoint,
+                    isValid,
+                    errorMessage,
+                } = parseAzureEndpoint(config.azure_endpoint);
+
+                if (!isValid) {
+                    console.warn(`Invalid Azure endpoint: ${errorMessage}`);
+                    azureEndpointInfo = { isValid: false };
+                    return;
+                }
+
+                // Update the config with parsed values
+                config.azure_endpoint = baseUrl;
+
+                if (apiVersion) {
+                    config.azure_api_version = apiVersion;
+                    console.log(`✓ Extracted API version: ${apiVersion}`);
+                }
+
+                if (isModelsEndpoint) {
+                    // For models endpoints, clear deployment name as it's not needed
+                    config.azure_deployment_name = "";
+                    console.log(
+                        "✓ Models API endpoint detected - deployment name cleared",
+                    );
+                } else if (deploymentName) {
+                    // For cognitive services endpoints, use extracted deployment name
+                    config.azure_deployment_name = deploymentName;
+                    console.log(
+                        `✓ Extracted deployment name: ${deploymentName}`,
+                    );
+                } else {
+                    // Cognitive services endpoint but no deployment name in URL
+                    console.log(
+                        "⚠ Cognitive Services endpoint detected but no deployment name found in URL. You may need to specify it manually.",
+                    );
+                }
+
+                // Set endpoint info for UI feedback
+                azureEndpointInfo = {
+                    isValid: true,
+                    type: isModelsEndpoint
+                        ? "Models API"
+                        : "Cognitive Services",
+                    deploymentDetected: deploymentName || undefined,
+                    apiVersionDetected: apiVersion || undefined,
+                };
+
+                console.log(
+                    `✓ Endpoint type: ${isModelsEndpoint ? "Models API" : "Cognitive Services"}`,
+                );
+                console.log(`✓ Base URL set to: ${baseUrl}`);
+            } catch (e) {
+                console.error("Failed to parse Azure endpoint:", e);
+                azureEndpointInfo = { isValid: false };
+            }
+        }
+        // Reset API key validation when endpoint changes
+        apiKeyValid = null;
+    }
 
     async function validateApiKey() {
         if (
@@ -69,6 +225,10 @@
                 endpoint:
                     config.api_provider === "azure_openai"
                         ? config.azure_endpoint
+                        : null,
+                apiVersion:
+                    config.api_provider === "azure_openai"
+                        ? config.azure_api_version
                         : null,
             })) as boolean;
             apiKeyValid = isValid;
@@ -106,7 +266,7 @@
                 openai_api_key: "",
                 azure_endpoint: "",
                 azure_api_key: "",
-                azure_api_version: "2024-08-01-preview",
+                azure_api_version: "2025-01-01-preview",
                 azure_deployment_name: "gpt-4.1-nano",
                 model: "gpt-4.1-nano",
                 target_language: "English",
@@ -126,7 +286,10 @@
 <div class="settings-overlay">
     <div class="settings-container">
         <div class="settings-header">
-            <h2><AppIcon />GPTranslate</h2>
+            <div class="settings-header-content">
+                <AppIcon size={48} className="settings-logo" />
+                <h1 class="settings-title">GPTranslate</h1>
+            </div>
             <button
                 class="close-btn"
                 onclick={onClose}
@@ -188,9 +351,51 @@
                             id="azure-endpoint"
                             type="url"
                             bind:value={config.azure_endpoint}
-                            placeholder="https://your-resource.openai.azure.com/"
+                            placeholder="Paste your full Azure OpenAI endpoint URL here..."
                             onblur={validateApiKey}
+                            oninput={onAzureEndpointChange}
                         />
+                        <small>
+                            Paste the complete endpoint URL from Azure portal.
+                            Supported formats:
+                            <br />
+                            •
+                            <code
+                                >https://resource.cognitiveservices.azure.com/openai/...</code
+                            >
+                            <br />
+                            •
+                            <code
+                                >https://resource.services.ai.azure.com/models/...</code
+                            >
+                            <br />
+                            The app will automatically extract the base URL, API
+                            version, and deployment name.
+                        </small>
+
+                        {#if azureEndpointInfo?.isValid}
+                            <div class="endpoint-info success">
+                                <i class="bi bi-check-circle-fill"></i>
+                                <strong>Auto-detected:</strong>
+                                {azureEndpointInfo.type} endpoint
+                                {#if azureEndpointInfo.deploymentDetected}
+                                    • Deployment: <code
+                                        >{azureEndpointInfo.deploymentDetected}</code
+                                    >
+                                {/if}
+                                {#if azureEndpointInfo.apiVersionDetected}
+                                    • API Version: <code
+                                        >{azureEndpointInfo.apiVersionDetected}</code
+                                    >
+                                {/if}
+                            </div>
+                        {:else if azureEndpointInfo?.isValid === false}
+                            <div class="endpoint-info error">
+                                <i class="bi bi-exclamation-triangle-fill"></i>
+                                <strong>Invalid endpoint format.</strong> Please
+                                use a valid Azure OpenAI endpoint URL.
+                            </div>
+                        {/if}
                     </div>
 
                     <div class="form-group">
@@ -218,7 +423,6 @@
                             {/if}
                         </div>
                     </div>
-
                     <div class="form-group">
                         <label for="azure-deployment"
                             >Azure Deployment Name</label
@@ -229,6 +433,20 @@
                             bind:value={config.azure_deployment_name}
                             placeholder="gpt-4"
                         />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="azure-api-version">Azure API Version</label>
+                        <input
+                            id="azure-api-version"
+                            type="text"
+                            bind:value={config.azure_api_version}
+                            placeholder="2025-01-01-preview"
+                        />
+                        <small>
+                            API version for Azure OpenAI requests (e.g.,
+                            2025-01-01-preview)
+                        </small>
                     </div>
                 {/if}
 
@@ -377,7 +595,8 @@
                         </a>
                     </div>
                     <div class="about-item">
-                        <strong>Version:</strong> GPTranslate 1.0
+                        <strong>Version:</strong>
+                        {version}
                     </div>
                 </div>
             </section>
@@ -443,23 +662,34 @@
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
         overflow: hidden;
     }
-
     .settings-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 20px 24px;
+        padding: 24px 24px 20px 24px;
         border-bottom: 1px solid #e0e0e0;
         flex-shrink: 0;
     }
 
-    .settings-header h2 {
-        margin: 0;
-        font-size: 1.4rem;
-        color: #333;
+    .settings-header-content {
         display: flex;
         align-items: center;
-        gap: 8px;
+        justify-content: center;
+        flex: 1;
+        gap: 12px;
+    }
+
+    .settings-title {
+        margin: 0;
+        font-size: 1.8rem;
+        font-weight: 600;
+        color: #333;
+        letter-spacing: -0.02em;
+    }
+
+    :global(.settings-logo) {
+        margin-right: 0 !important;
+        filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
     }
 
     .close-btn {
@@ -571,9 +801,45 @@
     .validation-icon.valid {
         color: #28a745;
     }
-
     .validation-icon.invalid {
         color: #dc3545;
+    }
+
+    .endpoint-info {
+        margin-top: 8px;
+        padding: 8px 12px;
+        border-radius: 6px;
+        font-size: 13px;
+        display: flex;
+        align-items: flex-start;
+        gap: 8px;
+        border: 1px solid;
+    }
+
+    .endpoint-info.success {
+        background: #d4edda;
+        color: #155724;
+        border-color: #c3e6cb;
+    }
+
+    .endpoint-info.error {
+        background: #f8d7da;
+        color: #721c24;
+        border-color: #f5c6cb;
+    }
+
+    .endpoint-info i {
+        font-size: 14px;
+        margin-top: 1px;
+        flex-shrink: 0;
+    }
+
+    .endpoint-info code {
+        background: rgba(0, 0, 0, 0.1);
+        padding: 2px 4px;
+        border-radius: 3px;
+        font-family: "Consolas", "Monaco", "Courier New", monospace;
+        font-size: 11px;
     }
 
     .checkbox-group {
@@ -737,7 +1003,7 @@
             border-color: #444;
         }
 
-        .settings-header h2 {
+        .settings-title {
             color: #f6f6f6;
         }
 
@@ -815,11 +1081,27 @@
             color: #a3cfac;
             border-color: #2d5930;
         }
-
         .save-message.error {
             background: #4a1e23;
             color: #f5c6cb;
             border-color: #5c2329;
+        }
+
+        .endpoint-info.success {
+            background: #1e4620;
+            color: #a3cfac;
+            border-color: #2d5930;
+        }
+
+        .endpoint-info.error {
+            background: #4a1e23;
+            color: #f5c6cb;
+            border-color: #5c2329;
+        }
+
+        .endpoint-info code {
+            background: rgba(255, 255, 255, 0.1);
+            color: #7dd3fc;
         }
     }
 
