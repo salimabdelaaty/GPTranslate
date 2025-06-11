@@ -47,4 +47,4 @@ uuid = { version = "1.0", features = ["v4", "serde"] }
 lazy_static = "1.4"
 
 [target.'cfg(windows)'.dependencies]
-winapi = { version = "0.3", features = ["winuser"] }
+winapi = { version = "0.3", features = ["winuser", "wingdi"] }

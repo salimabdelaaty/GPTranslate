@@ -46,7 +46,9 @@
     "windows": {
       "nsis": {
         "installMode": "currentUser",
-        "languages": ["English"]
+        "languages": [
+          "English"
+        ]
       }
     }
   }

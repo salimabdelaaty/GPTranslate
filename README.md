@@ -1,4 +1,4 @@
-# ![GPTranslate](img/logo.svg)
+# ![GPTranslate](img/logo_app.svg) GPTranslate
 
 A fast, modern **AI powered** desktop translation application built with Rust and Tauri that provides instant translation between multiple languages with global hotkey support, system tray integration, and a beautiful user interface. Using either OpenAI or Azure OpenAI, it delivers high-quality translations with minimal latency and cost.
 

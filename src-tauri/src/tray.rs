@@ -6,22 +6,85 @@ use tauri::{
     AppHandle, Manager,
 };
 
+use crate::theme::{get_system_theme, SystemTheme};
+
+fn get_optimal_icon_size() -> u32 {
+    // On Windows, try to detect DPI scaling
+    #[cfg(target_os = "windows")]
+    {
+        use std::ptr;
+        use winapi::um::wingdi::{GetDeviceCaps, LOGPIXELSX};
+        use winapi::um::winuser::{GetDC, ReleaseDC};
+
+        unsafe {
+            let hdc = GetDC(ptr::null_mut());
+            if !hdc.is_null() {
+                let dpi = GetDeviceCaps(hdc, LOGPIXELSX);
+                ReleaseDC(ptr::null_mut(), hdc);
+
+                // Calculate scale factor (96 DPI is 100% scaling)
+                let scale_factor = dpi as f32 / 96.0;
+                log::info!("Detected DPI: {}, Scale factor: {:.1}", dpi, scale_factor);
+
+                // Choose icon size based on scale factor
+                match scale_factor {
+                    x if x >= 2.0 => 32,  // 200% scaling or higher
+                    x if x >= 1.5 => 24,  // 150% scaling
+                    x if x >= 1.25 => 20, // 125% scaling
+                    _ => 16,              // 100% scaling
+                }
+            } else {
+                log::warn!("Failed to get device context, using default icon size");
+                24 // Default to 24px for good quality
+            }
+        }
+    }
+
+    #[cfg(not(target_os = "windows"))]
+    {
+        24 // Default size for non-Windows platforms
+    }
+}
+
 fn get_theme_icon() -> Result<Image<'static>> {
-    // Use the high-quality icon file for the tray
-    let icon_bytes = include_bytes!("../icons/icon.ico");
-    Image::from_bytes(icon_bytes).map_err(|e| anyhow::anyhow!("Failed to load icon: {}", e))
+    // Detect system theme and use appropriate icon
+    let theme = get_system_theme().unwrap_or(SystemTheme::Light);
+    let icon_size = get_optimal_icon_size();
+    log::info!("Loading tray icon: theme={:?}, size={}px", theme, icon_size);
+
+    // Use PNG files for better quality in system tray
+    // Logic: Use icon variant that matches the theme
+    let icon_bytes: &[u8] = match (theme, icon_size) {
+        (SystemTheme::Dark, 16) => include_bytes!("../icons/tray_dark_16.png"),
+        (SystemTheme::Dark, 20) => include_bytes!("../icons/tray_dark_20.png"),
+        (SystemTheme::Dark, 24) => include_bytes!("../icons/tray_dark_24.png"),
+        (SystemTheme::Dark, _) => include_bytes!("../icons/tray_dark_32.png"),
+        (SystemTheme::Light, 16) => include_bytes!("../icons/tray_light_16.png"),
+        (SystemTheme::Light, 20) => include_bytes!("../icons/tray_light_20.png"),
+        (SystemTheme::Light, 24) => include_bytes!("../icons/tray_light_24.png"),
+        (SystemTheme::Light, _) => include_bytes!("../icons/tray_light_32.png"),
+    };
+
+    Image::from_bytes(icon_bytes).map_err(|e| anyhow::anyhow!("Failed to load tray icon: {}", e))
 }
 
 pub fn create_tray(app: &AppHandle) -> Result<()> {
+    log::info!("Starting tray creation...");
+
     // Create tray menu
     let open_item = MenuItem::with_id(app, "open", "Open GPTranslate", true, None::<&str>)?;
     let quit_item = MenuItem::with_id(app, "quit", "Quit", true, None::<&str>)?;
 
     let menu = Menu::with_items(app, &[&open_item, &quit_item])?;
 
+    log::info!("Tray menu created successfully");
+
     // Get icon for tray
     let icon = match get_theme_icon() {
-        Ok(icon) => icon,
+        Ok(icon) => {
+            log::info!("Successfully loaded theme-appropriate tray icon");
+            icon
+        }
         Err(e) => {
             log::warn!("Failed to load tray icon: {}", e);
             // Fallback to default window icon
@@ -59,7 +122,6 @@ pub fn create_tray(app: &AppHandle) -> Result<()> {
                     } => {
                         let _ = app.show();
                         let _ = app.set_focus();
-                        log::info!("Tray icon left clicked - showing main window");
                     }
                     TrayIconEvent::DoubleClick {
                         button: MouseButton::Left,
@@ -67,7 +129,6 @@ pub fn create_tray(app: &AppHandle) -> Result<()> {
                     } => {
                         let _ = app.show();
                         let _ = app.set_focus();
-                        log::info!("Tray icon double clicked - showing main window");
                     }
                     _ => {}
                 }
@@ -75,5 +136,6 @@ pub fn create_tray(app: &AppHandle) -> Result<()> {
         })
         .build(app)?;
 
+    log::info!("✅ Tray icon created successfully!");
     Ok(())
 }

@@ -9,6 +9,7 @@ use winapi::um::winuser::{GetSysColor, COLOR_WINDOW};
 
 mod config;
 mod history;
+pub mod theme;
 mod translation;
 mod tray;
 

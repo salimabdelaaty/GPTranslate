@@ -177,7 +177,6 @@
         console.error("Failed to reload config:", e);
       });
   }
-
   function openHistory() {
     showHistory = true;
   }

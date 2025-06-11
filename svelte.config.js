@@ -8,7 +8,21 @@ import { vitePreprocess } from "@sveltejs/vite-plugin-svelte";
 const config = {
   preprocess: vitePreprocess(),
   kit: {
-    adapter: adapter(),
+    adapter: adapter({
+      fallback: 'index.html',
+      precompress: false
+    }),
+    prerender: {
+      handleHttpError: ({ path, referrer, message }) => {
+        // ignore deliberate link to shiny 404 page
+        if (path === '/not-found' && referrer === '/blog/how-is-sveltekit-so-fast') {
+          return;
+        }
+
+        // otherwise fail the build
+        throw new Error(message);
+      }
+    }
   },
 };
 
