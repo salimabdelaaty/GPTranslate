@@ -27,7 +27,7 @@ impl Default for Config {
             openai_api_key: "".to_string(),
             azure_endpoint: "".to_string(),
             azure_api_key: "".to_string(),
-            azure_api_version: "2024-08-01-preview".to_string(),
+            azure_api_version: "2025-01-01-preview".to_string(),
             azure_deployment_name: "gpt-4.1-nano".to_string(),
             model: "gpt-4.1-nano".to_string(), // Updated default for OpenAI
             target_language: "English".to_string(), // Default target language

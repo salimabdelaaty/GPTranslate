@@ -69,6 +69,12 @@ A fast, modern **AI powered** desktop translation application built with Rust an
 - **Duplicate Prevention**: Smart request deduplication
 - **Performance**: Optimized with debouncing and efficient state management
 
+## Planned Features
+
+- Integration with **Ollama** for local AI translation support
+- Integration with **Anthropic** for Anthropic LLM models
+- Integration with **DeepSeek** for advanced search-based translation
+
 ## 💰 Cost Analysis
 
 GPTranslate is designed to be extremely cost-effective with the recommended `gpt-4.1-nano` model:
@@ -85,6 +91,10 @@ GPTranslate is designed to be extremely cost-effective with the recommended `gpt
 
 \*Based on ~100 words (130 tokens input + output)
 
+#### Azure Models and Prices
+
+Azure OpenAI should offer comparable pricing, though I don’t have access to the exact cost details—only the models themselves—so I can’t provide specific figures. That said, the `gpt-4.1-nano` model is a great choice due to its balance of low cost and high quality. You might also consider using the `model-router`, which automatically picks the most suitable model for your request. However, keep in mind that it won’t always choose the cheapest option. For translation tasks specifically, specialised models like `mistral-small` or `mistral-small-2503` are worth exploring, as they are likely to deliver exceptional results.
+
 ### Real-World Usage Examples
 
 - **Single paragraph**: Less than $0.0001 with gpt-4.1-nano
@@ -95,7 +105,7 @@ The `gpt-4.1-nano` model provides excellent translation quality at virtually no 
 
 ## ⬇️ Download Windows Installer
 
-You can download the latest Windows installer from the [Releases](https://github.com/philberndt/GPTranslate/releases/tag/Stable) page.
+You can download the latest Windows installer from the [Releases](https://github.com/philberndt/GPTranslate/releases) page.
 
 ## 🚀 Quick Start
 

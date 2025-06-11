@@ -24,3 +24,4 @@ config.json
 ~/.gptranslate/config.json
 appsettings.json
 **/appsettings.json
+generate_icons.ps1

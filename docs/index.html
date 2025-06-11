@@ -1,26 +1,601 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
     <head>
-        <meta charset='utf-8'>
-        <meta http-equiv='X-UA-Compatible' content='IE=edge'>
-        <title>GPTranslate - AI powered translation app</title>
-        <meta name='viewport' content='width=device-width, initial-scale=1'>
-        <link rel='stylesheet' type='text/css' media='screen' href='main.css'>
-        <script src='main.js'></script>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>GPTranslate - AI Powered Translation App</title>
+        <meta name="description"
+            content="A fast, modern AI powered desktop translation application built with Rust and Tauri. Instant translation between multiple languages with global hotkey support and beautiful UI.">
+        <!-- CSS Dependencies -->
+        <link rel="stylesheet" href="https://unpkg.com/ress/dist/ress.min.css">
+        <link rel="stylesheet" href="https://unpkg.com/chota@latest">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/theme-toggles@4.10.1/css/expand.min.css">
+
+        <!-- Roboto Font -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link
+            href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+            rel="stylesheet"> <!-- Favicon -->
+        <link rel="icon" href="assets/logo_app.svg" type="image/svg+xml">
+
+        <style>
+            :root {
+                --primary-color: #379df1;
+                --primary-hover: #2980d9;
+                --text-color: #333333;
+                --bg-color: #ffffff;
+                --bg-secondary: #f8f9fa;
+                --border-color: #e9ecef;
+                --shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+                --shadow-hover: 0 4px 16px rgba(0, 0, 0, 0.15);
+            }
+
+            body.dark {
+                --text-color: #f5f5f5;
+                --bg-color: #1a1a1a;
+                --bg-secondary: #2d2d2d;
+                --border-color: #404040;
+                --shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+                --shadow-hover: 0 4px 16px rgba(0, 0, 0, 0.4);
+            }
+
+            body {
+                font-family: "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+                background-color: var(--bg-color);
+                color: var(--text-color);
+                transition: background-color 0.3s ease, color 0.3s ease;
+                font-size: 16px;
+                line-height: 1.6;
+            }
+
+            .hero {
+                background: var(--bg-color);
+                color: var(--text-color);
+                padding: 4rem 0;
+                text-align: center;
+                position: relative;
+            }
+
+            .hero-content {
+                position: relative;
+                z-index: 1;
+            }
+
+            .hero-title {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 1.5rem;
+                margin-bottom: 2rem;
+            }
+
+            .hero-logo {
+                width: 120px;
+                height: 120px;
+            }
+
+            .hero h1 {
+                font-size: 4rem;
+                margin: 0;
+                font-weight: 900;
+                color: var(--primary-color);
+            }
+
+            .hero p {
+                font-size: 1.4rem;
+                margin-bottom: 2rem;
+                opacity: 0.8;
+                max-width: 600px;
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .download-btn {
+                background: var(--primary-color);
+                color: white;
+                padding: 1rem 2rem;
+                border-radius: 50px;
+                text-decoration: none;
+                font-weight: 600;
+                display: inline-flex;
+                align-items: center;
+                gap: 0.5rem;
+                transition: all 0.3s ease;
+                box-shadow: var(--shadow);
+            }
+
+            .download-btn:hover {
+                transform: translateY(-2px);
+                box-shadow: var(--shadow-hover);
+                background: var(--primary-hover);
+                color: white;
+            }
+
+            .github-btn {
+                background: white;
+                color: var(--primary-color);
+                border: 2px solid white;
+                padding: 1rem 2rem;
+                border-radius: 50px;
+                text-decoration: none;
+                font-weight: 600;
+                display: inline-flex;
+                align-items: center;
+                gap: 0.5rem;
+                transition: all 0.3s ease;
+                box-shadow: var(--shadow);
+                margin-left: 1rem;
+            }
+
+            .github-btn:hover {
+                transform: translateY(-2px);
+                box-shadow: var(--shadow-hover);
+                background: #f8f9fa;
+                color: var(--primary-color);
+                border-color: #f8f9fa;
+            }
+
+            .section {
+                padding: 4rem 0;
+            }
+
+            .section-alt {
+                background-color: var(--bg-secondary);
+            }
+
+            .section h2 {
+                text-align: center;
+                margin-bottom: 3rem;
+                font-size: 2.5rem;
+                font-weight: 600;
+            }
+
+            .features-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+                gap: 2rem;
+                margin-top: 2rem;
+            }
+
+            .feature-card {
+                background: var(--bg-color);
+                border: 1px solid var(--border-color);
+                border-radius: 12px;
+                padding: 2rem;
+                text-align: center;
+                transition: all 0.3s ease;
+                box-shadow: var(--shadow);
+            }
+
+            .feature-card:hover {
+                transform: translateY(-4px);
+                box-shadow: var(--shadow-hover);
+            }
+
+            .feature-icon {
+                font-size: 4rem;
+                color: #333333;
+                margin-bottom: 1rem;
+            }
+
+            body.dark .feature-icon {
+                color: #C0C0C0;
+            }
+
+            .feature-card h3 {
+                margin-bottom: 1rem;
+                font-size: 1.6rem;
+                font-weight: 600;
+            }
+
+            .feature-card p {
+                font-size: 1.2rem;
+                line-height: 1.6;
+            }
+
+            .screenshot-container {
+                text-align: center;
+                margin: 2rem 0;
+            }
+
+            .screenshot {
+                max-width: 100%;
+                height: auto;
+                border-radius: 12px;
+                box-shadow: var(--shadow-hover);
+                transition: all 0.3s ease;
+            }
+
+            .screenshot:hover {
+                transform: scale(1.02);
+            }
+
+            .theme-toggle-container {
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                z-index: 1000;
+            }
+
+            .theme-toggle {
+                background: var(--bg-color);
+                border: 1px solid var(--border-color);
+                border-radius: 50%;
+                width: 50px;
+                height: 50px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                box-shadow: var(--shadow);
+                transition: all 0.3s ease;
+                color: var(--text-color);
+            }
+
+            .theme-toggle:hover {
+                box-shadow: var(--shadow-hover);
+            }
+
+            .theme-toggle svg {
+                width: 24px;
+                height: 24px;
+                fill: currentColor;
+            }
+
+            .footer {
+                background: var(--bg-secondary);
+                padding: 2rem 0;
+                text-align: center;
+                border-top: 1px solid var(--border-color);
+            }
+
+            @media (max-width: 768px) {
+                .hero-title {
+                    flex-direction: column;
+                    gap: 1rem;
+                }
+
+                .hero-logo {
+                    width: 80px;
+                    height: 80px;
+                }
+
+                .hero h1 {
+                    font-size: 2.5rem;
+                }
+
+                .hero p {
+                    font-size: 1.2rem;
+                }
+
+                .features-grid {
+                    grid-template-columns: 1fr;
+                }
+
+                .section h2 {
+                    font-size: 2rem;
+                }
+            }
+
+            /* Custom button styles */
+            .button.primary {
+                background-color: var(--primary-color);
+                border-color: var(--primary-color);
+            }
+
+            .button.primary:hover {
+                background-color: var(--primary-hover);
+                border-color: var(--primary-hover);
+            }
+        </style>
     </head>
 
-    <body>
-        <h1>GPTranslate</h1>
-        <p>A fast, modern <strong>AI powered</strong> desktop translation application built with Rust and Tauri that
-            provides instant translation between multiple languages with global hotkey support, system tray integration,
-            and a beautiful user interface. Using either OpenAI or Azure OpenAI, it delivers high-quality translations
-            with minimal latency and cost.</p>
-        <h2>Website is comming!</h2>
-        <p>Meanwhile you can visit the GitHub repository at <a
-                href="https://github.com/philberndt/GPTranslate">https://github.com/philberndt/GPTranslate</a>
-        </p>
-        <p>There you can see all it's features and functionalities</p>
+    <body> <!-- Theme Toggle -->
+        <div class="theme-toggle-container">
+            <button class="theme-toggle theme-toggle--toggled" type="button" aria-label="Toggle theme">
+                <i class="bi bi-sun-fill" id="theme-icon"></i>
+            </button>
+        </div><!-- Hero Section -->
+        <section class="hero">
+            <div class="container">
+                <div class="hero-content">
+                    <div class="hero-title">
+                        <img src="assets/logo_app.svg" alt="GPTranslate Logo" class="hero-logo">
+                        <h1>GPTranslate</h1>
+                    </div>
+                    <p>A fast, modern AI powered desktop translation application built with Rust and Tauri. Instant
+                        translation between multiple languages with global hotkey support, system tray integration, and
+                        a beautiful user interface.</p>
+                    <div style="margin-bottom: 2rem;">
+                        <a href="https://github.com/philberndt/GPTranslate/releases" class="download-btn"
+                            target="_blank">
+                            <i class="bi bi-download"></i>
+                            Download for Windows
+                        </a>
+                        <a href="https://github.com/philberndt/GPTranslate" class="github-btn" target="_blank">
+                            <i class="bi bi-github"></i> GitHub
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Screenshot Section -->
+        <section class="section">
+            <div class="container">
+                <h2>Beautiful, Simple Interface</h2>
+                <div class="screenshot-container">
+                    <img src="assets/main_light.png" alt="GPTranslate Main Interface" class="screenshot"
+                        id="main-screenshot">
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="section section-alt">
+            <div class="container">
+                <h2>Powerful Features</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <i class="bi bi-lightning-charge feature-icon"></i>
+                        <h3>Lightning Fast</h3>
+                        <p>Instant translations with debounced input and smart request deduplication. Real-time
+                            translation as you type.</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="bi bi-globe feature-icon"></i>
+                        <h3>Multi-Language Support</h3>
+                        <p>Seamless translation between dozens of languages with intelligent auto-detection and
+                            configurable target languages.</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="bi bi-robot feature-icon"></i>
+                        <h3>AI Powered</h3>
+                        <p>Leverages OpenAI and Azure OpenAI APIs for high-quality translations with custom prompts and
+                            variable support.</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="bi bi-keyboard feature-icon"></i>
+                        <h3>Global Hotkeys</h3>
+                        <p>Configurable global hotkey (Ctrl+Alt+C) for instant clipboard translation from anywhere on
+                            your system.</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="bi bi-moon-stars feature-icon"></i>
+                        <h3>Beautiful Themes</h3>
+                        <p>Auto, light, and dark themes with system detection. Modern, responsive interface that scales
+                            beautifully.</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="bi bi-clock-history feature-icon"></i>
+                        <h3>Translation History</h3>
+                        <p>Persistent translation history with easy access to previous translations and efficient data
+                            management.</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="bi bi-cash-coin feature-icon"></i>
+                        <h3>Extremely Cost Effective</h3>
+                        <p>Using the recommended gpt-4.1-nano model, costs virtually nothing at ~$0.00005 per
+                            translation. 100 translations/day = ~$1.50/month.</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="bi bi-heart feature-icon"></i>
+                        <h3>Free & Open Source</h3>
+                        <p>Completely free to use with full source code available on GitHub. No subscriptions, no hidden
+                            fees, just transparent open-source software.</p>
+                    </div>
+                </div>
+            </div>
+        </section> <!-- System Integration Section -->
+        <section class="section section-alt">
+            <div class="container">
+                <h2>Seamless System Integration</h2>
+                <div class="row">
+                    <div class="col-6 is-vertical-align">
+                        <div>
+                            <h3><i class="bi bi-window-sidebar"></i> System Tray</h3>
+                            <p>Runs quietly in the background with convenient system tray access and context menu.</p>
+
+                            <h3><i class="bi bi-clipboard-check"></i> Clipboard Integration</h3>
+                            <p>Seamless read/write clipboard operations with automatic content capture via global
+                                hotkey.</p>
+
+                            <h3><i class="bi bi-gear"></i> Auto-start</h3>
+                            <p>Optional startup with Windows and single instance prevention for optimal resource usage.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="screenshot-container">
+                            <img src="assets/translation.png" alt="GPTranslate Translation in Action"
+                                class="screenshot">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Additional Screenshots -->
+                <div class="row" style="margin-top: 3rem;">
+                    <div class="col-6">
+                        <div class="screenshot-container">
+                            <img src="assets/settings.png" alt="GPTranslate Settings" class="screenshot">
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="screenshot-container">
+                            <img src="assets/history.png" alt="GPTranslate History" class="screenshot">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section><!-- Requirements Section -->
+        <section class="section">
+            <div class="container">
+                <h2>What You Need</h2>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="feature-card" style="max-width: 800px; margin: 0 auto;">
+                            <i class="bi bi-key feature-icon"></i>
+                            <h3>API Key Required</h3>
+                            <p style="margin-bottom: 1.5rem;">To use GPTranslate, you'll need an API key from one of
+                                these providers:</p>
+                            <div class="row" style="margin-bottom: 1.5rem;">
+                                <div class="col-6">
+                                    <h4 style="color: var(--primary-color); margin-bottom: 0.5rem;">
+                                        <i class="bi bi-openai"></i> OpenAI
+                                    </h4>
+                                    <p style="font-size: 0.9rem; margin-bottom: 0.5rem;">Get your API key from:</p>
+                                    <a href="https://platform.openai.com/api-keys" target="_blank"
+                                        style="color: var(--primary-color); text-decoration: none;">
+                                        platform.openai.com/api-keys <i class="bi bi-arrow-up-right"></i>
+                                    </a>
+                                </div>
+                                <div class="col-6">
+                                    <h4 style="color: var(--primary-color); margin-bottom: 0.5rem;">
+                                        <i class="bi bi-microsoft"></i> Azure OpenAI
+                                    </h4>
+                                    <p style="font-size: 0.9rem; margin-bottom: 0.5rem;">Get your API key from:</p>
+                                    <a href="https://portal.azure.com/" target="_blank"
+                                        style="color: var(--primary-color); text-decoration: none;">
+                                        Azure Portal <i class="bi bi-arrow-up-right"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div
+                                style="background: var(--bg-secondary); padding: 1rem; border-radius: 8px; font-size: 1.1rem;">
+                                <i class="bi bi-info-circle" style="color: var(--primary-color);"></i>
+                                <strong>Note:</strong> The recommended <code>gpt-4.1-nano</code> model costs ~$0.00005
+                                per translation.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section> <!-- Download Section -->
+        <section class="section section-alt">
+            <div class="container text-center">
+                <h2>Get Started Today</h2>
+                <p style="margin-bottom: 3rem;">Download GPTranslate and experience fast, AI-powered translation with
+                    beautiful design.</p>
+                <a href="https://github.com/philberndt/GPTranslate/releases" class="download-btn" target="_blank">
+                    <i class="bi bi-download"></i>
+                    Download Windows Installer
+                </a>
+                <p style="margin-top: 1rem; opacity: 0.7;">
+                    <small>Free and open source • Available on GitHub</small>
+                </p>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="container">
+                <p>&copy; 2025 GPTranslate. Built with ❤️ using Rust and Tauri.</p>
+                <p>
+                    <a href="https://github.com/philberndt/GPTranslate" target="_blank">GitHub</a> •
+                    <a href="https://github.com/philberndt/GPTranslate/releases" target="_blank">Releases</a> •
+                    <a href="https://github.com/philberndt/GPTranslate/issues" target="_blank">Support</a>
+                </p>
+            </div>
+        </footer>
+        <script>
+            // Theme toggle functionality
+            const themeToggle = document.querySelector('.theme-toggle');
+            const themeIcon = document.getElementById('theme-icon');
+            const body = document.body;
+            const mainScreenshot = document.getElementById('main-screenshot');
+
+            // Check for saved theme preference or default to 'auto' mode
+            const currentTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches; function updateScreenshot(isDark) {
+                if (mainScreenshot) {
+                    mainScreenshot.src = isDark ? 'assets/main_dark.png' : 'assets/main_light.png';
+                }
+            }
+
+            function updateThemeIcon(isDark) {
+                if (themeIcon) {
+                    themeIcon.className = isDark ? 'bi bi-moon-fill' : 'bi bi-sun-fill';
+                }
+            }
+
+            function setTheme(theme) {
+                const isDark = theme === 'dark' || (theme === 'auto' && prefersDark);
+
+                if (isDark) {
+                    body.classList.add('dark');
+                    themeToggle.classList.add('theme-toggle--toggled');
+                    updateScreenshot(true);
+                    updateThemeIcon(true);
+                } else {
+                    body.classList.remove('dark');
+                    themeToggle.classList.remove('theme-toggle--toggled');
+                    updateScreenshot(false);
+                    updateThemeIcon(false);
+                }
+            }
+
+            // Initialize theme
+            if (currentTheme) {
+                setTheme(currentTheme);
+            } else {
+                setTheme('auto');
+            }
+
+            // Theme toggle click handler
+            themeToggle.addEventListener('click', () => {
+                const isDark = body.classList.contains('dark');
+                const newTheme = isDark ? 'light' : 'dark';
+
+                localStorage.setItem('theme', newTheme);
+                setTheme(newTheme);
+            });
+
+            // Listen for system theme changes
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+                if (localStorage.getItem('theme') === 'auto' || !localStorage.getItem('theme')) {
+                    setTheme('auto');
+                }
+            });
+
+            // Smooth scrolling for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+
+            // Add intersection observer for scroll animations
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+
+            // Animate cards on scroll
+            document.querySelectorAll('.feature-card, .screenshot').forEach(el => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(20px)';
+                el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(el);
+            });
+        </script>
     </body>
 
 </html>

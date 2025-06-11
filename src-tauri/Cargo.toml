@@ -1,6 +1,6 @@
 [package]
 name = "gptranslate"
-version = "1.0.0"
+version = "1.1.0"
 description = "A fast, modern desktop translation application built with Rust and Tauri that provides instant translation between multiple languages with global hotkey support, system tray integration, and a beautiful user interface."
 authors = ["Phil Berndt <phil@berndt.no>"]
 license = "MIT"
@@ -9,7 +9,7 @@ repository = "https://github.com/philberndt/gptranslate"
 documentation = "https://gptranslate.berndt.no"
 keywords = ["translation", "desktop", "tauri", "ai", "clipboard"]
 categories = ["gui", "text-processing", "localization"]
-edition = "2021"
+edition = "2024"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
@@ -45,6 +45,7 @@ env_logger = "0.11"
 chrono = { version = "0.4", features = ["serde"] }
 uuid = { version = "1.0", features = ["v4", "serde"] }
 lazy_static = "1.4"
+url = "2.5"
 
 [target.'cfg(windows)'.dependencies]
 winapi = { version = "0.3", features = ["winuser", "wingdi"] }

@@ -191,21 +191,16 @@ async fn test_translation_from_clipboard(
     }
 }
 
-#[tauri::command]
-async fn get_available_models(api_provider: String) -> Result<Vec<String>, String> {
-    let models = match api_provider.as_str() {
-        "openai" => vec![
-            "gpt-4.1-nano".to_string(),
-            "gpt-4o".to_string(),
-            "gpt-4o-mini".to_string(),
-            "gpt-4-turbo".to_string(),
-            "gpt-4".to_string(),
-            "gpt-3.5-turbo".to_string(),
-        ],
-        "azure_openai" => vec!["gpt-4.1-nano".to_string(), "o4-mini".to_string()],
-        _ => vec!["gpt-4o-mini".to_string()],
-    };
-    Ok(models)
+fn extract_api_version_from_url(url: &str) -> Option<String> {
+    // Try to extract api-version from URL query parameters
+    if let Ok(parsed_url) = url::Url::parse(url) {
+        for (key, value) in parsed_url.query_pairs() {
+            if key == "api-version" {
+                return Some(value.to_string());
+            }
+        }
+    }
+    None
 }
 
 #[tauri::command]
@@ -213,6 +208,7 @@ async fn validate_api_key(
     api_provider: String,
     api_key: String,
     endpoint: Option<String>,
+    api_version: Option<String>,
 ) -> Result<bool, String> {
     let client = reqwest::Client::new();
 
@@ -229,7 +225,30 @@ async fn validate_api_key(
         }
         "azure_openai" => {
             if let Some(endpoint) = endpoint {
-                let url = format!("{}openai/models?api-version=2024-08-01-preview", endpoint);
+                // Use provided api_version, or try to extract from endpoint, or use default
+                let version = api_version
+                    .or_else(|| extract_api_version_from_url(&endpoint))
+                    .unwrap_or_else(|| "2025-01-01-preview".to_string());
+
+                // Determine endpoint type based on hostname
+                let is_models_endpoint = endpoint.contains("services.ai.azure.com");
+
+                let url = if is_models_endpoint {
+                    // Models API endpoint - use /models endpoint for validation
+                    format!(
+                        "{}/models?api-version={}",
+                        endpoint.trim_end_matches('/'),
+                        version
+                    )
+                } else {
+                    // Cognitive Services endpoint - use /openai/models endpoint for validation
+                    format!(
+                        "{}/openai/models?api-version={}",
+                        endpoint.trim_end_matches('/'),
+                        version
+                    )
+                };
+
                 let response = client
                     .get(&url)
                     .header("api-key", &api_key)
@@ -572,7 +591,6 @@ pub fn run() {
             copy_to_clipboard,
             test_translation_from_clipboard,
             get_windows_theme,
-            get_available_models,
             validate_api_key,
             get_translation_history_cmd,
             clear_translation_history_cmd,

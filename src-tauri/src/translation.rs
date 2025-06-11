@@ -120,10 +120,20 @@ impl TranslationService {
             "max_tokens": 800,
             "temperature": 0.3
         });
-
         if self.config.api_provider == "openai" {
             request_body["model"] = json!(self.config.model);
             log::info!("Using OpenAI model: {}", self.config.model);
+        } else if self.config.api_provider == "azure_openai" {
+            // For Azure Models API endpoints, we need to include the model parameter
+            // For Cognitive Services endpoints, the model is specified in the URL path
+            let is_models_endpoint = self.config.azure_endpoint.contains("services.ai.azure.com");
+            if is_models_endpoint && !self.config.azure_deployment_name.is_empty() {
+                request_body["model"] = json!(self.config.azure_deployment_name);
+                log::info!(
+                    "Using Azure Models API model: {}",
+                    self.config.azure_deployment_name
+                );
+            }
         }
 
         let response = if self.config.api_provider == "azure_openai" {
@@ -302,16 +312,36 @@ impl TranslationService {
 
         Ok(response.json().await?)
     }
-
     async fn call_azure_openai(&self, request_body: Value) -> Result<Value> {
-        let url = format!(
-            "{}openai/deployments/{}/chat/completions?api-version={}",
-            self.config.azure_endpoint,
-            self.config.azure_deployment_name,
-            self.config.azure_api_version
-        );
+        // Determine endpoint type based on hostname
+        let is_models_endpoint = self.config.azure_endpoint.contains("services.ai.azure.com");
+
+        let url = if is_models_endpoint {
+            // Models API endpoint format
+            format!(
+                "{}/models/chat/completions?api-version={}",
+                self.config.azure_endpoint.trim_end_matches('/'),
+                self.config.azure_api_version
+            )
+        } else {
+            // Cognitive Services endpoint format
+            format!(
+                "{}/openai/deployments/{}/chat/completions?api-version={}",
+                self.config.azure_endpoint.trim_end_matches('/'),
+                self.config.azure_deployment_name,
+                self.config.azure_api_version
+            )
+        };
 
         log::info!("Making Azure OpenAI request to: {}", url);
+        log::info!(
+            "Endpoint type: {}",
+            if is_models_endpoint {
+                "Models API"
+            } else {
+                "Cognitive Services"
+            }
+        );
         log::info!(
             "Request body: {}",
             serde_json::to_string_pretty(&request_body).unwrap_or_default()

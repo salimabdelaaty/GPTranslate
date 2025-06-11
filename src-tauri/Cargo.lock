@@ -1599,7 +1599,7 @@ dependencies = [
 
 [[package]]
 name = "gptranslate"
-version = "1.0.0"
+version = "1.1.0"
 dependencies = [
  "anyhow",
  "chrono",
@@ -1622,6 +1622,7 @@ dependencies = [
  "tauri-plugin-single-instance",
  "tauri-plugin-window-state",
  "tokio",
+ "url",
  "uuid",
  "winapi",
 ]
